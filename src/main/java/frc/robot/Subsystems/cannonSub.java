@@ -67,6 +67,8 @@ public class cannonSub extends SubsystemBase {
   public void SmartDashBoardData(){
     SmartDashboard.putNumber("Compressor1 Pressure", compressor1pressure());
     SmartDashboard.putNumber("Compressor2 Pressure", compressor2pressure());
+    SmartDashboard.putNumber("Compressor1 Voltage", compressor1.getAnalogVoltage());
+    SmartDashboard.putNumber("Compressor2 Voltage", compressor2.getAnalogVoltage());
   }
   @Override
   public void periodic() {
