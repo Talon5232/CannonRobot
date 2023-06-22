@@ -15,10 +15,10 @@ import frc.robot.Constants;
 
 public class driveSub extends SubsystemBase {
   //Set the ID of motors using constant class
-  private final WPI_VictorSPX leftmotor1 = new WPI_VictorSPX(Constants.leftmotor1);
-  private final WPI_VictorSPX leftmotor2 = new WPI_VictorSPX(Constants.leftmotor2);
-  private final WPI_TalonSRX rightmotor1 = new WPI_TalonSRX(Constants.rightmotor1);
-  private final WPI_TalonSRX rightmotor2 = new WPI_TalonSRX(Constants.rightmotor2);
+  private final WPI_TalonSRX leftmotor1 = new WPI_TalonSRX(Constants.leftmotor1);
+  private final WPI_TalonSRX leftmotor2 = new WPI_TalonSRX(Constants.leftmotor2);
+  private final WPI_VictorSPX rightmotor1 = new WPI_VictorSPX(Constants.rightmotor1);
+  private final WPI_VictorSPX rightmotor2 = new WPI_VictorSPX(Constants.rightmotor2);
   private final DifferentialDrive drivetrain;
   
   public driveSub() {
