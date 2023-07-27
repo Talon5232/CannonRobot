@@ -4,11 +4,13 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -18,74 +20,104 @@ import frc.robot.Constants;
 
 public class cannonSub extends SubsystemBase {
   /** Creates a new cannonSub. */
-  private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
-  private final Compressor compressor1 = new Compressor(1, PneumaticsModuleType.REVPH);
-  private final Compressor compressor2 = new Compressor(2, PneumaticsModuleType.REVPH);
+ private final Solenoid solenoid1 = new Solenoid(11,PneumaticsModuleType.REVPH, Constants.solinoid1);
+ //private final Solenoid solenoid2 = new Solenoid(11,PneumaticsModuleType.REVPH, Constants.solinoid2);
+// private final DoubleSolenoid solenoid1 = new DoubleSolenoid(11, PneumaticsModuleType.REVPH, Constants.solinoid3, Constants.solinoid1);
+ //private final DoubleSolenoid solenoid2 = new DoubleSolenoid(11, PneumaticsModuleType.REVPH, Constants.solinoid4, Constants.solinoid2); 
+  private final Compressor compressor1 = new Compressor(11, PneumaticsModuleType.REVPH);
   private final WPI_TalonFX cannonMotor = new WPI_TalonFX(Constants.cannonMotor);
+  private int setpoint;
   
   public boolean cannon1shot = true;
+  public double preasure = 0;
+  public double maxpreassure = 110;
+  private double error = 0;
   public boolean cannon2shot = true;
+  private double pm = .0005;
 
   
   public cannonSub() {
-
+  //cannonMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void shootCannon1(){
-    solenoid.set(Value.kForward);
+   // solenoid1.set(Value.kForward);
+   // solenoid2.set(Value.kForward);
+    
+   // solenoid1.set(true);
+  solenoid1.toggle();
     cannon1shot = true;
   }
 
   public void shootCannon2(){
-    solenoid.set(Value.kReverse);
+    //solenoid2.set(Value.kForward);
+   // solenoid2.set(Value.kReverse);
+   // solenoid1.set(Value.kReverse);
+    
+
+   // solenoid2.set(true);
+   // solenoid2.toggle();
     cannon2shot = true;
   }
 
   public void disableCannon(){
-    solenoid.set(Value.kOff);
+    //solenoid1.set(Value.kReverse);
+    //solenoid2.set(Value.kReverse);
+     solenoid1.set(false);
+   //  solenoid2.set(false);
   }
 
-  public void cannonMotorStop(){
-    cannonMotor.set(0);
-  }
+  
 
   public void cannonup(){
-    cannonMotor.set(.2);
+   setpoint = setpoint + 10;
   }
 
   public void cannonDown(){
-    cannonMotor.set(-.2);
+   setpoint = setpoint -10;
   }
+
+
 
 
   public void refillCannons(){
     //Both tanks must be shot before refilling to ensure not overfilling one tank
     if(cannon1shot == true && cannon2shot == true){
       compressor1.enableAnalog(Constants.minPressure, Constants.maxPressure);
-      compressor2.enableDigital();
     }
   }
-  public void disableCompressors(){
-    compressor1.disable();
-    compressor2.disable();
-  }
 
+  public void refillCannonShort(){}
+  public void disableCompressors(){
+   compressor1.disable();
+  }
+  
   public double compressor1pressure(){
     return compressor1.getPressure();
   }
 
-  public double compressor2pressure(){
-    return compressor2.getPressure();
-  }
-
   public void SmartDashBoardData(){
     SmartDashboard.putNumber("Compressor1 Pressure", compressor1pressure());
-    SmartDashboard.putNumber("Compressor2 Pressure", compressor2pressure());
+    SmartDashboard.putBoolean("Solinoid1", solenoid1.get());
+  //  SmartDashboard.putBoolean("Solinoid2", solenoid2.get());
+    SmartDashboard.putNumber("Compressor`0 Pressure", compressor1.getPressure());
     SmartDashboard.putNumber("Compressor1 Voltage", compressor1.getAnalogVoltage());
-    SmartDashboard.putNumber("Compressor2 Voltage", compressor2.getAnalogVoltage());
+    SmartDashboard.putNumber("Encoder", cannonMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("MotorPower", error);
   }
+  
   @Override
   public void periodic() {
-    SmartDashBoardData();
+   error = setpoint - cannonMotor.getSelectedSensorPosition();
+   if(error >= .2){
+    error = .2;
+   }
+   else if (error <= -.2){
+    error = -.2;
+   }
+   //cannonMotor.set(error);
+
+   SmartDashBoardData();
+
   }
 }

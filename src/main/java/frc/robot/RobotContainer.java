@@ -26,7 +26,7 @@ public class RobotContainer {
   private final JoystickButton Abutton = new JoystickButton(xbox, XboxController.Button.kA.value);
 
   private final JoystickButton rightbumperbutton = new JoystickButton(xbox, XboxController.Button.kRightBumper.value);
-  private final JoystickButton leftbumperbutton = new JoystickButton(xbox, XboxController.Button.kRightBumper.value);
+  private final JoystickButton leftbumperbutton = new JoystickButton(xbox, XboxController.Button.kLeftBumper.value);
 
 
   private final driveSub m_drive = new driveSub();
@@ -34,7 +34,7 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    m_drive.setDefaultCommand(new drive(m_drive, xbox.getRawAxis(joystickY), xbox.getRawAxis(joystickZ)));
+    m_drive.setDefaultCommand(new drive(m_drive, () -> -xbox.getRawAxis(joystickY), () -> xbox.getRawAxis(joystickZ)));
 
     configureBindings();
   }
@@ -43,10 +43,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     Ybutton.onTrue(new cannonRefill(m_cannon));
-    rightbumperbutton.onTrue(new InstantCommand(() -> m_cannon.shootCannon2()));
-    leftbumperbutton.onTrue(new InstantCommand(() -> m_cannon.shootCannon1()));
-    Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown())).whileFalse(new InstantCommand(() -> m_cannon.cannonMotorStop()));
-    Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup())).whileFalse(new InstantCommand(() -> m_cannon.cannonMotorStop()));
+   rightbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.shootCannon2()));
+   leftbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.shootCannon1()));
+    Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown()));
+    Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup()));
+    
   }
 
 

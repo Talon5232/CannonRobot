@@ -4,15 +4,17 @@
 
 package frc.robot.Commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.driveSub;
 
 public class drive extends CommandBase {
   /** Creates a new drive. */
   private driveSub m_drive;
-  private double joystickY;
-  private double joystickZ;
-  public drive(driveSub m_drive, double joystickY, double joystickZ) {
+  private DoubleSupplier joystickY;
+  private DoubleSupplier joystickZ;
+  public drive(driveSub m_drive, DoubleSupplier joystickY, DoubleSupplier joystickZ) {
     this.m_drive = m_drive;
     addRequirements(m_drive);
     this.joystickY = joystickY;

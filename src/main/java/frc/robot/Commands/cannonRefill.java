@@ -21,26 +21,27 @@ public class cannonRefill extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_cannon.disableCannon();
+    this.m_cannon.disableCannon();
+    finished = false;
     
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_cannon.refillCannons();
+    this.m_cannon.refillCannons();
     //Constants are good!
-    if(m_cannon.compressor1pressure() >= Constants.minPressure){
-      finished = true;
-    }
+   if(this.m_cannon.compressor1pressure() >= Constants.minPressure){
+     finished = true;
+   }
   }
     
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_cannon.cannon1shot = false;
-    m_cannon.cannon2shot = false;
-    m_cannon.disableCompressors();
+    this.m_cannon.cannon1shot = false;
+    this.m_cannon.cannon2shot = false;
+   this.m_cannon.disableCompressors();
   }
   
   // Returns true when the command should end.
