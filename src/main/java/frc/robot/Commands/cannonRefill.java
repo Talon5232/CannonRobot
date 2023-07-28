@@ -5,7 +5,6 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Subsystems.cannonSub;
 
 public class cannonRefill extends CommandBase {
@@ -31,7 +30,7 @@ public class cannonRefill extends CommandBase {
   public void execute() {
     this.m_cannon.refillCannons();
     //Constants are good!
-   if(this.m_cannon.compressor1pressure() >= Constants.minPressure){
+   if(this.m_cannon.compressor1pressure() >= m_cannon.getPressureSetpoint()){
      finished = true;
    }
   }
@@ -39,8 +38,9 @@ public class cannonRefill extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.m_cannon.cannon1shot = false;
-    this.m_cannon.cannon2shot = false;
+    this.m_cannon.cannonleftshot = false;
+    this.m_cannon.pressureAmountSet = false;
+    this.m_cannon.cannonrightshot = false;
    this.m_cannon.disableCompressors();
   }
   

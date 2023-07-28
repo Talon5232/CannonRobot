@@ -6,11 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.cannonRefill;
 import frc.robot.Commands.drive;
 import frc.robot.Subsystems.*;
@@ -25,6 +25,13 @@ public class RobotContainer {
   private final JoystickButton Bbutton = new JoystickButton(xbox, XboxController.Button.kB.value);
   private final JoystickButton Abutton = new JoystickButton(xbox, XboxController.Button.kA.value);
   private final JoystickButton Xbutton = new JoystickButton(xbox, XboxController.Button.kX.value);
+  private final JoystickButton startButton = new JoystickButton(xbox, XboxController.Button.kStart.value);
+
+  private final POVButton leftDpad = new POVButton(xbox, 270);
+  private final POVButton upDpad = new POVButton(xbox, 0);
+  private final POVButton downDpad = new POVButton(xbox, 180);
+
+
 
   private final JoystickButton rightbumperbutton = new JoystickButton(xbox, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftbumperbutton = new JoystickButton(xbox, XboxController.Button.kLeftBumper.value);
@@ -43,13 +50,25 @@ public class RobotContainer {
   
 
   private void configureBindings() {
-    Ybutton.onTrue(new cannonRefill(m_cannon));
-   rightbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.shootCannon2()));
-   leftbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.shootCannon1()));
-    Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown()));
-    Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup()));
-    Xbutton.onTrue(new InstantCommand(() -> m_cannon.compressoron()));
+   Ybutton.onTrue(new cannonRefill(m_cannon));
+
+   rightbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.rightCannonShoot()));
+
+   leftbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.leftCannonShoot()));
+
+   Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown()));
+
+   Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup()));
+
+   Xbutton.onTrue(new InstantCommand(() -> m_cannon.disableCompressors()));
+
+   downDpad.onTrue(new InstantCommand(() -> m_cannon.lowerPressure()));
+
+   leftDpad.onTrue(new InstantCommand(() -> m_cannon.middlePressure()));
+
+   upDpad.onTrue(new InstantCommand(() -> m_cannon.upperPressure()));
     
+   startButton.onTrue(new InstantCommand(() -> m_cannon.cannonEncoderReset()));
   }
 
 
