@@ -31,7 +31,6 @@ public class cannonSub extends SubsystemBase {
   private final WPI_TalonSRX solenoid3 = new WPI_TalonSRX(12);
   private final WPI_TalonSRX solenoid4 = new WPI_TalonSRX(13);
   private final WPI_TalonFX cannonMotor = new WPI_TalonFX(Constants.cannonMotor);
-  private final PneumaticHub hub = new PneumaticHub();
   private int setpoint;
   
   public boolean cannon1shot = true;
@@ -113,9 +112,6 @@ public class cannonSub extends SubsystemBase {
 
   public void SmartDashBoardData(){
     SmartDashboard.putNumber("Compressor1 Pressure", compressor1pressure());
-    //SmartDashboard.putNumber("Pressure", hub.getPressure(0));
-    SmartDashboard.putBoolean("Solinoid1", solenoid1.get());
-  //  SmartDashboard.putBoolean("Solinoid2", solenoid2.get());
     SmartDashboard.putNumber("Compressor`0 Pressure", compressor1.getPressure());
     SmartDashboard.putNumber("Compressor1 Voltage", compressor1.getAnalogVoltage());
     SmartDashboard.putNumber("Encoder", cannonMotor.getSelectedSensorPosition());

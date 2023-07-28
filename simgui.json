@@ -1,0 +1,31 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon SRX[3]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[3]/Analog In": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[3]/Pulse Width Input": {
+        "header": {
+          "open": true
+        }
+      },
+      "Victor SPX[2]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    }
+  }
+}
