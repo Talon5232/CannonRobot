@@ -7,10 +7,13 @@ package frc.robot.Subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -25,7 +28,10 @@ public class cannonSub extends SubsystemBase {
 // private final DoubleSolenoid solenoid1 = new DoubleSolenoid(11, PneumaticsModuleType.REVPH, Constants.solinoid3, Constants.solinoid1);
  //private final DoubleSolenoid solenoid2 = new DoubleSolenoid(11, PneumaticsModuleType.REVPH, Constants.solinoid4, Constants.solinoid2); 
   private final Compressor compressor1 = new Compressor(11, PneumaticsModuleType.REVPH);
+  private final WPI_TalonSRX solenoid3 = new WPI_TalonSRX(12);
+  private final WPI_TalonSRX solenoid4 = new WPI_TalonSRX(13);
   private final WPI_TalonFX cannonMotor = new WPI_TalonFX(Constants.cannonMotor);
+  private final PneumaticHub hub = new PneumaticHub();
   private int setpoint;
   
   public boolean cannon1shot = true;
@@ -34,27 +40,35 @@ public class cannonSub extends SubsystemBase {
   private double error = 0;
   public boolean cannon2shot = true;
   private double pm = .0005;
+  
 
   
   public cannonSub() {
+   solenoid3.configPeakCurrentLimit(1);
+   solenoid3.configContinuousCurrentLimit(1);
+   solenoid4.configPeakCurrentLimit(1);
+   solenoid4.configContinuousCurrentLimit(1);
+
   //cannonMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void shootCannon1(){
    // solenoid1.set(Value.kForward);
    // solenoid2.set(Value.kForward);
-    
+   solenoid3.setVoltage(13);
+   solenoid4.setVoltage(13);
    // solenoid1.set(true);
-  solenoid1.toggle();
     cannon1shot = true;
   }
-
+  public void compressoron(){
+    compressor1.enableDigital();
+  }
   public void shootCannon2(){
     //solenoid2.set(Value.kForward);
    // solenoid2.set(Value.kReverse);
    // solenoid1.set(Value.kReverse);
-    
-
+  solenoid4.setVoltage(0);
+  solenoid3.setVoltage(0);
    // solenoid2.set(true);
    // solenoid2.toggle();
     cannon2shot = true;
@@ -63,7 +77,8 @@ public class cannonSub extends SubsystemBase {
   public void disableCannon(){
     //solenoid1.set(Value.kReverse);
     //solenoid2.set(Value.kReverse);
-     solenoid1.set(false);
+   solenoid3.setVoltage(0);
+  solenoid4.setVoltage(0);
    //  solenoid2.set(false);
   }
 
@@ -98,6 +113,7 @@ public class cannonSub extends SubsystemBase {
 
   public void SmartDashBoardData(){
     SmartDashboard.putNumber("Compressor1 Pressure", compressor1pressure());
+    //SmartDashboard.putNumber("Pressure", hub.getPressure(0));
     SmartDashboard.putBoolean("Solinoid1", solenoid1.get());
   //  SmartDashboard.putBoolean("Solinoid2", solenoid2.get());
     SmartDashboard.putNumber("Compressor`0 Pressure", compressor1.getPressure());

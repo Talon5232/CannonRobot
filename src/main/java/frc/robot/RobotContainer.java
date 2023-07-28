@@ -24,6 +24,7 @@ public class RobotContainer {
   private final JoystickButton Ybutton = new JoystickButton(xbox, XboxController.Button.kY.value);
   private final JoystickButton Bbutton = new JoystickButton(xbox, XboxController.Button.kB.value);
   private final JoystickButton Abutton = new JoystickButton(xbox, XboxController.Button.kA.value);
+  private final JoystickButton Xbutton = new JoystickButton(xbox, XboxController.Button.kX.value);
 
   private final JoystickButton rightbumperbutton = new JoystickButton(xbox, XboxController.Button.kRightBumper.value);
   private final JoystickButton leftbumperbutton = new JoystickButton(xbox, XboxController.Button.kLeftBumper.value);
@@ -47,6 +48,7 @@ public class RobotContainer {
    leftbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.shootCannon1()));
     Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown()));
     Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup()));
+    Xbutton.onTrue(new InstantCommand(() -> m_cannon.compressoron()));
     
   }
 
