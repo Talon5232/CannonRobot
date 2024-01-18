@@ -30,6 +30,7 @@ public class RobotContainer {
   private final POVButton leftDpad = new POVButton(xbox, 270);
   private final POVButton upDpad = new POVButton(xbox, 0);
   private final POVButton downDpad = new POVButton(xbox, 180);
+  private final POVButton rightDpad = new POVButton(xbox, 90);
 
 
 
@@ -42,7 +43,7 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    m_drive.setDefaultCommand(new drive(m_drive, () -> -xbox.getRawAxis(joystickY), () -> xbox.getRawAxis(joystickZ)));
+    m_drive.setDefaultCommand(new drive(m_drive, () -> -xbox.getRawAxis(joystickY), () -> -xbox.getRawAxis(joystickZ)));
 
     configureBindings();
   }
@@ -56,11 +57,11 @@ public class RobotContainer {
 
    leftbumperbutton.whileTrue(new InstantCommand(() -> m_cannon.leftCannonShoot()));
 
-   Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown()));
+   Abutton.whileTrue(new InstantCommand(() -> m_cannon.cannonDown())).whileFalse(new InstantCommand(() -> m_cannon.CannonMotorZero()));
 
-   Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup()));
+   Bbutton.whileTrue(new InstantCommand(() -> m_cannon.cannonup())).whileFalse(new InstantCommand(() -> m_cannon.CannonMotorZero()));
 
-   Xbutton.onTrue(new InstantCommand(() -> m_cannon.disableCompressors()));
+   Xbutton.onTrue(new InstantCommand(() -> m_cannon.disableCannon()));
 
    downDpad.onTrue(new InstantCommand(() -> m_cannon.lowerPressure()));
 
@@ -68,7 +69,7 @@ public class RobotContainer {
 
    upDpad.onTrue(new InstantCommand(() -> m_cannon.upperPressure()));
     
-   startButton.onTrue(new InstantCommand(() -> m_cannon.cannonEncoderReset()));
+   rightDpad.onTrue(new InstantCommand(() -> m_cannon.cannonEncoderReset()));
   }
 
 

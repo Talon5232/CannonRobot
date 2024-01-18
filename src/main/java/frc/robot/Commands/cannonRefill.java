@@ -42,6 +42,7 @@ public class cannonRefill extends CommandBase {
     this.m_cannon.pressureAmountSet = false;
     this.m_cannon.cannonrightshot = false;
    this.m_cannon.disableCompressors();
+   
   }
   
   // Returns true when the command should end.

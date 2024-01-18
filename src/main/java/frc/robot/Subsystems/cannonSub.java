@@ -22,6 +22,7 @@ public class cannonSub extends SubsystemBase {
   private final WPI_TalonSRX leftCannonSolenoid = new WPI_TalonSRX(Constants.leftCannonSolenoid);
   private final WPI_TalonSRX rightCannonSolenoid = new WPI_TalonSRX(Constants.rightCannonSolenoid);
   private final WPI_TalonFX cannonMotor = new WPI_TalonFX(Constants.cannonMotor);
+
   private final PIDController pid = new PIDController(Constants.cannonKp, 0, Constants.cannonKd);
   public double setpoint = 0;
   public boolean cannonleftshot = true;
@@ -90,10 +91,18 @@ public class cannonSub extends SubsystemBase {
 //#region Cannon Motor Movement
   public void cannonup(){
     setpoint = setpoint + Constants.cannonSetpointAdjustment;
+    cannonMotor.set(.15);
    }
+
+   
  
    public void cannonDown(){
     setpoint = setpoint - Constants.cannonSetpointAdjustment;
+    cannonMotor.set(-.15);
+   }
+
+   public void CannonMotorZero(){
+    cannonMotor.set(0);
    }
 
    public void cannonEncoderReset(){
@@ -101,14 +110,22 @@ public class cannonSub extends SubsystemBase {
    }
 
   public void cannonMotorCorrection(){
+    
     if (setpoint >= Constants.cannonEncoderMax){
       setpoint = Constants.cannonEncoderMax;
     }
     else if (setpoint <= Constants.cannonEncoderMin){
       setpoint = Constants.cannonEncoderMin;
     }
-    cannonMotor.set(pid.calculate(cannonEncoder.getAbsolutePosition(), setpoint));
-    
+    double correction = pid.calculate(cannonEncoder.getAbsolutePosition()-.75, setpoint);
+    if(correction >= .6){
+      correction = .6;
+    }
+    else if(correction <= -.6){
+      correction = -.6;
+    }
+   //cannonMotor.set(correction);
+
   }
   //#endregion
 
@@ -116,8 +133,10 @@ public class cannonSub extends SubsystemBase {
     SmartDashboard.putNumber("Compressor1 Pressure", compressor1pressure());
     SmartDashboard.putNumber("Compressor`0 Pressure", compressor1.getPressure());
     SmartDashboard.putNumber("Compressor1 Voltage", compressor1.getAnalogVoltage());
-    SmartDashboard.putNumber("Encoder", cannonMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Encoder", cannonEncoder.getAbsolutePosition()-.75);
     SmartDashboard.putNumber("PressureSetpoint", getPressureSetpoint());
+    SmartDashboard.putNumber("CannonGet", (pid.calculate(cannonEncoder.getAbsolutePosition()-.75, setpoint)));
+    SmartDashboard.updateValues();
     
   }
   
